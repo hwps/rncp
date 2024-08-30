@@ -1,14 +1,28 @@
 #!/usr/bin/env python
-"""rncp: Copy source files to target in a randomized order.
-usage: rncp source_file ... target_directory"""
+"""rncp: Copy source files to target in a randomized order."""
 
 import sys
 import os
 import random
 import shutil
-import fnmatch
+import argparse
 
 def main():
+	parser = argparse.ArgumentParser(description=__doc__)
+	parser.add_argument("-v", "--verbose", help="Verbose mode", action="store_true")
+	parser.add_argument("-d", "--dry", help="Dry run (do no actual copying)", action="store_true")
+	# parser.add_argument("-f", "--foo", help="number of foo", type=int)
+	parser.add_argument("src", help="Source files", nargs="+")
+	parser.add_argument("dst", help="Destination directory")
+
+	if len(sys.argv)==1:
+		# parser.print_help()
+		print(__doc__)
+		parser.print_usage() # for just the usage line
+		parser.exit()
+
+	args = parser.parse_args()
+
 	if len(sys.argv) >= 3:
 		destDir = sys.argv[-1]
 		if os.path.isdir(destDir):
